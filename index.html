@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogue Nouméa Surgelés</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <button class="drawer-toggle" id="drawerToggle" aria-label="Ouvrir les catégories" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="brand">
+      <span class="brand__mark">❆</span>
+      <div class="brand__text">
+        <span class="brand__title">NOUMÉA SURGELÉS</span>
+        <span class="brand__sub">Catalogue produits · Prix de vente HT</span>
+      </div>
+    </div>
+    <div class="search">
+      <svg class="search__icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Chercher un produit, une référence…" autocomplete="off">
+      <button class="search__clear" id="searchClear" aria-label="Effacer la recherche" hidden>×</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Sections du site">
+  <button class="tabs__btn is-active" id="tabHome" data-tab="home">Accueil</button>
+  <button class="tabs__btn" id="tabCatalogue" data-tab="catalogue">Catalogue</button>
+  <button class="tabs__btn" id="tabAbout" data-tab="about">À propos</button>
+  <button class="tabs__btn" id="tabContact" data-tab="contact">Contact</button>
+</nav>
+
+<div class="layout" id="layout">
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <aside class="sidebar" id="sidebar" hidden>
+    <div class="sidebar__head">
+      <span>Catégories</span>
+      <button class="sidebar__reset" id="resetFilters">Tout voir</button>
+    </div>
+    <nav id="tree" class="tree" aria-label="Arborescence du catalogue"></nav>
+  </aside>
+
+  <main class="main">
+
+    <section id="homeView" class="home-showcase">
+      <div class="hero">
+        <span class="hero__mark">❆</span>
+        <h1 class="hero__title">NOUMÉA SURGELÉS</h1>
+        <p class="hero__tagline" id="heroTagline">Grossiste en produits surgelés — charcuterie, crémerie, viandes, volailles, produits de la mer et bien plus.</p>
+        <p class="hero__draft-note">✏️ Texte d'accroche à valider ou remplacer — dites-moi ce que vous voulez mettre en avant.</p>
+        <div class="hero__actions">
+          <button class="hero__cta hero__cta--primary" id="heroCatalogueBtn">Découvrir le catalogue</button>
+          <button class="hero__cta hero__cta--ghost" id="heroContactBtn">Nous contacter</button>
+        </div>
+        <div class="hero__stats" id="heroStats"></div>
+      </div>
+
+      <div class="highlights">
+        <div class="highlight-card">
+          <span class="highlight-card__icon">🧊</span>
+          <h3>Chaîne du froid maîtrisée</h3>
+          <p class="draft-text">Produits stockés et livrés dans le respect strict de la chaîne du froid. <em>(texte à confirmer)</em></p>
+        </div>
+        <div class="highlight-card">
+          <span class="highlight-card__icon">📦</span>
+          <h3>Un large choix</h3>
+          <p class="draft-text" id="highlightRange">Un catalogue varié pour les professionnels de la restauration et du commerce.</p>
+        </div>
+        <div class="highlight-card">
+          <span class="highlight-card__icon">🚚</span>
+          <h3>Livraison professionnels</h3>
+          <p class="draft-text">Livraison adaptée aux besoins des restaurateurs et commerces. <em>(zone/délais à préciser)</em></p>
+        </div>
+        <div class="highlight-card">
+          <span class="highlight-card__icon">🤝</span>
+          <h3>Service de proximité</h3>
+          <p class="draft-text">Une équipe disponible pour vous conseiller. <em>(texte à confirmer)</em></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="catalogueView" class="catalogue-view" hidden>
+      <div class="breadcrumb" id="breadcrumb"></div>
+
+      <div class="main__head">
+        <h2 id="sectionTitle">Tout le catalogue</h2>
+        <div class="main__meta">
+          <span id="resultCount"></span>
+          <label class="sort" id="sortWrap">
+            Trier
+            <select id="sortSelect">
+              <option value="name-asc">Nom (A→Z)</option>
+              <option value="name-desc">Nom (Z→A)</option>
+              <option value="price-asc">Prix croissant</option>
+              <option value="price-desc">Prix décroissant</option>
+              <option value="ref-asc">Référence</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div id="grid" class="grid"></div>
+
+      <div id="emptyState" class="empty" hidden>
+        <p class="empty__title">Aucun produit ne correspond à votre recherche.</p>
+        <p class="empty__sub">Essayez un autre mot-clé, une autre référence, ou revenez à l'ensemble du catalogue.</p>
+        <button class="empty__btn" id="emptyReset">Réinitialiser</button>
+      </div>
+    </section>
+
+    <section id="aboutView" class="about" hidden>
+      <h2 class="about__title">À propos de Nouméa Surgelés</h2>
+      <p class="about__draft-note">✏️ Cette page est un brouillon — envoyez-moi votre texte de présentation, vos horaires et votre adresse réels pour les remplacer.</p>
+      <div class="about__grid">
+        <div class="about__block">
+          <h3>Qui sommes-nous</h3>
+          <p class="draft-text">[À compléter] Présentation de la société Nouméa Surgelés : historique, activité, engagement qualité.</p>
+        </div>
+        <div class="about__block">
+          <h3>Coordonnées</h3>
+          <dl class="about__coords">
+            <div><dt>Adresse</dt><dd>[Adresse à compléter]</dd></div>
+            <div><dt>Téléphone</dt><dd>[Téléphone à compléter]</dd></div>
+            <div><dt>Email</dt><dd>[Email à compléter]</dd></div>
+            <div><dt>Horaires</dt><dd>[Horaires à compléter]</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="contactView" class="contact" hidden>
+      <h2 class="contact__title">Nous contacter</h2>
+      <p class="contact__intro">Une question sur un produit, une disponibilité, une commande ? Écrivez-nous : le message s'ouvrira dans votre application mail, prêt à envoyer.</p>
+      <form id="contactForm" class="contact__form">
+        <div class="contact__row">
+          <label class="contact__field">
+            <span>Votre nom *</span>
+            <input type="text" id="cName" required autocomplete="name">
+          </label>
+          <label class="contact__field">
+            <span>Téléphone</span>
+            <input type="tel" id="cPhone" autocomplete="tel">
+          </label>
+        </div>
+        <label class="contact__field">
+          <span>Société (facultatif)</span>
+          <input type="text" id="cCompany" autocomplete="organization">
+        </label>
+        <label class="contact__field">
+          <span>Référence produit concernée (facultatif)</span>
+          <input type="text" id="cRef" placeholder="ex. 1042331">
+        </label>
+        <label class="contact__field">
+          <span>Votre message *</span>
+          <textarea id="cMessage" rows="6" required placeholder="Décrivez votre demande…"></textarea>
+        </label>
+        <div class="contact__actions">
+          <button type="submit" class="contact__send">Ouvrir dans mon app mail</button>
+          <button type="button" class="contact__copy" id="contactCopy">Copier le message</button>
+        </div>
+        <p class="contact__note" id="contactNote" hidden></p>
+      </form>
+    </section>
+
+  </main>
+</div>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox__close" id="lightboxClose" aria-label="Fermer">×</button>
+  <div class="lightbox__panel">
+    <div class="lightbox__image" id="lightboxImage"></div>
+    <div class="lightbox__info">
+      <span class="tag-badge tag-badge--lb" id="lightboxPrice"></span>
+      <h2 id="lightboxName"></h2>
+      <dl class="lightbox__specs">
+        <div><dt>Référence</dt><dd id="lightboxRef"></dd></div>
+        <div><dt>Univers</dt><dd id="lightboxUnivers"></dd></div>
+        <div><dt>Sous-famille</dt><dd id="lightboxSf"></dd></div>
+        <div><dt>Conditionnement</dt><dd id="lightboxCond"></dd></div>
+        <div><dt>TVA/TGC</dt><dd id="lightboxTgc"></dd></div>
+      </dl>
+      <button class="lightbox__ask" id="lightboxAsk">Poser une question sur ce produit</button>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
